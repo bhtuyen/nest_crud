@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  ID           String         @id @default(uuid())
+  Email        String         @unique
+  Name         String
+  Password     String
+  CreatedAt    DateTime       @default(now())
+  UpdatedAt    DateTime       @updatedAt
+  Post         Post[]
+  RefreshToken RefreshToken[]
+
+  @@map("User")
+}
+
+model Post {
+  ID        String   @id @default(uuid())
+  Title     String
+  Content   String
+  AuthorID  String
+  Author    User     @relation(fields: [AuthorID], references: [ID], onDelete: Cascade, onUpdate: NoAction)
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+
+  @@map("Post")
+}
+
+model RefreshToken {
+  Token     String   @unique
+  UserID    String
+  User      User     @relation(fields: [UserID], references: [ID], onDelete: Cascade, onUpdate: NoAction)
+  ExpiresAt DateTime
+  CreatedAt DateTime @default(now())
+
+  @@map("RefreshToken")
+}
