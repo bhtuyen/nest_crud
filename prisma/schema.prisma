@@ -13,12 +13,12 @@ datasource db {
 }
 
 model User {
-  ID           String         @id @default(uuid())
-  Email        String         @unique
-  Name         String
-  Password     String
-  CreatedAt    DateTime       @default(now())
-  UpdatedAt    DateTime       @updatedAt
+  ID           String         @id @default(uuid()) @map("id")
+  Email        String         @unique @map("email")
+  Name         String         @map("name")
+  Password     String         @map("password")
+  CreatedAt    DateTime       @default(now()) @map("created_at")
+  UpdatedAt    DateTime       @updatedAt @map("updated_at")
   Post         Post[]
   RefreshToken RefreshToken[]
 
@@ -26,23 +26,23 @@ model User {
 }
 
 model Post {
-  ID        String   @id @default(uuid())
-  Title     String
-  Content   String
-  AuthorID  String
+  ID        String   @id @default(uuid()) @map("id")
+  Title     String   @map("title")
+  Content   String   @map("content")
+  AuthorID  String   @map("author_id")
   Author    User     @relation(fields: [AuthorID], references: [ID], onDelete: Cascade, onUpdate: NoAction)
-  CreatedAt DateTime @default(now())
-  UpdatedAt DateTime @updatedAt
+  CreatedAt DateTime @default(now()) @map("created_at")
+  UpdatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("Post")
 }
 
 model RefreshToken {
-  Token     String   @unique
-  UserID    String
+  Token     String   @unique @map("token")
+  UserID    String   @map("user_id")
   User      User     @relation(fields: [UserID], references: [ID], onDelete: Cascade, onUpdate: NoAction)
-  ExpiresAt DateTime
-  CreatedAt DateTime @default(now())
+  ExpiredAt DateTime @map("expired_at")
+  CreatedAt DateTime @default(now()) @map("created_at")
 
   @@map("RefreshToken")
 }
