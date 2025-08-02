@@ -1,6 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ClassSerializerInterceptor, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+import { LoggingInterceptor } from '@shared/interceptors/logging.interceptor';
+import { TransformInterceptor } from '@shared/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,7 +24,7 @@ async function bootstrap() {
       }
     })
   );
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)), new LoggingInterceptor(), new TransformInterceptor());
   await app.listen(process.env.PORT ?? 3000);
 }
 
