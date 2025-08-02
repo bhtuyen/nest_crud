@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
 /**
  * Dịch vụ băm mật khẩu
  */
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class HashingService {
   /**
    * Số lần lặp lại để tạo chuỗi hash
