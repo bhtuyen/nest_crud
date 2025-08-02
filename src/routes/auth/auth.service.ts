@@ -2,6 +2,7 @@ import { ConflictException, Injectable, InternalServerErrorException } from '@ne
 import { Prisma } from '@prisma/client';
 import { HashingService } from '@shared/services/hashing.service';
 import { PrismaService } from '@shared/services/prisma.service';
+import { RegisterBodyDTO } from './auto.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
    * @param body - Thông tin đăng ký
    * @returns Thông tin tài khoản
    */
-  async register(body: any) {
+  async register(body: RegisterBodyDTO) {
     try {
       console.log(body);
       const passwordHash = await this.hashingService.hash(body.Password);

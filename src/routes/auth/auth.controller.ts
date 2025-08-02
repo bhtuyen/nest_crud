@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { RegisterBodyDTO } from './auto.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,7 +12,9 @@ export class AuthController {
    * @returns Thông tin tài khoản
    */
   @Post('register')
-  register(@Body() body: any) {
+  register(@Body() body: RegisterBodyDTO) {
+    console.log(body);
+    return 'register';
     return this.authService.register(body);
   }
 }
