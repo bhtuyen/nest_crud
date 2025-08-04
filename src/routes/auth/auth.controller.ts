@@ -1,6 +1,7 @@
 import { Body, Controller, Post, SerializeOptions } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterBodyDTO, RegisterResponseDTO } from './dtos/auto.dto';
+import { LoginBodyDTO, RegisterBodyDTO, RegisterResponseDTO } from './dtos/auto.dto';
+import { RefreshTokenBodyDTO } from '@shared/types/jwt.type';
 
 @Controller('auth')
 export class AuthController {
@@ -16,8 +17,27 @@ export class AuthController {
     type: RegisterResponseDTO
   })
   @Post('register')
-  async register(@Body() body: RegisterBodyDTO) {
-    const result = await this.authService.register(body);
-    return result;
+  register(@Body() body: RegisterBodyDTO) {
+    return this.authService.register(body);
+  }
+
+  /**
+   * Đăng nhập
+   * @param body - Thông tin đăng nhập
+   * @returns Thông tin tài khoản
+   */
+  @Post('login')
+  login(@Body() body: LoginBodyDTO) {
+    return this.authService.login(body);
+  }
+
+  /**
+   * Refresh token
+   * @param body - Thông tin refresh token
+   * @returns Thông tin tài khoản
+   */
+  @Post('refresh-token')
+  refreshToken(@Body() body: RefreshTokenBodyDTO) {
+    return this.authService.refreshToken(body);
   }
 }
