@@ -2,6 +2,7 @@ import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
 import { UserEntity } from '../entities/user.entity';
 import { Exclude } from 'class-transformer';
 import { User } from '@prisma/client';
+import { Match } from '@shared/decorators/match';
 
 export class LoginBodyDTO implements Pick<UserEntity, 'Email' | 'Password'> {
   @IsString()
@@ -15,6 +16,10 @@ export class LoginBodyDTO implements Pick<UserEntity, 'Email' | 'Password'> {
 export class RegisterBodyDTO extends LoginBodyDTO implements Pick<UserEntity, 'Email' | 'Password' | 'Name'> {
   @IsString()
   Name: string;
+
+  @Match('Password', {
+    message: 'Password and ConfirmPassword must match'
+  })
   @IsString()
   @IsStrongPassword()
   ConfirmPassword: string;
